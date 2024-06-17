@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:movieapp/common/color.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,24 +26,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * .5,
-                height: 50,
-                decoration: const BoxDecoration(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: MovieAppColor.splashBgColor,
+        body: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * .5,
+                  height: 50,
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/images/myimage.png'))),
-              ),
-              //space
-              const SizedBox(height: 10),
-              //text
-              const Text('Moviemat')
-            ]),
+                      image: AssetImage('assets/images/myimage.png'),
+                    ),
+                  ),
+                ),
+                //space
+                const SizedBox(height: 10),
+                //text
+                const Text('Moviemat')
+              ]),
+        ),
       ),
     );
   }

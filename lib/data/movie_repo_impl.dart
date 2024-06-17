@@ -1,18 +1,20 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:movieapp/common/constants.dart';
 import 'package:movieapp/common/results.dart';
 import 'package:movieapp/domain/movie_repo.dart';
 import 'package:http/http.dart' as http;
+import 'package:movieapp/models/movie_model.dart';
 
 class MovieRepoImplementation implements MovieRepository {
   @override
-  Future<Result> getMovies() async {
+  Future<Result> getPopularMovies() async {
     try {
       Loading(value: 'Loading...');
       final response = await http.get(
           Uri.parse(
-            Constants.endPoint,
+            Constants.popularMovieListEndPoint,
           ),
           headers: {
             'Content-Type': 'application/json',
@@ -21,18 +23,21 @@ class MovieRepoImplementation implements MovieRepository {
           });
 
       if (response.statusCode == 200) {
-        log('success: ${response.body}');
-        return Success(value: response.body);
-      } else if (response.statusCode == 401) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse is List) {
+          final res =
+              jsonResponse.map((e) => MovieResponse.fromJson(e)).toList();
+          log('List res: $res');
+          return Success(value: res);
+        } else {
+          final res = MovieResponse.fromJson(jsonResponse);
+          log('json res: $res');
+          return Success(value: res);
+        }
+      } else {
         log('failed: ${response.body}');
         return Failed(
           errorMessage: 'unauthorized',
-          value: response.body,
-        );
-      } else {
-        log('else: ${response.body}');
-        return Failed(
-          errorMessage: 'errorMessage',
           value: response.body,
         );
       }

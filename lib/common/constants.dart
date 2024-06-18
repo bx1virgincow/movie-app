@@ -6,4 +6,7 @@ class Constants {
 
   static const String popularMovieListEndPoint =
       'https://api.themoviedb.org/3/movie/popular';
+
+  static const String trendingMoviesEndpoint =
+      'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
 }

@@ -7,7 +7,11 @@ final class MovieLoadingState extends MovieState {}
 
 final class PopularMoviesState extends MovieState {
   final MovieResponse popularMovies;
-  PopularMoviesState({required this.popularMovies});
+  final MovieResponse trendingMovies;
+  PopularMoviesState({
+    required this.popularMovies,
+    required this.trendingMovies,
+  });
 }
 
 final class FreeToWatchMovieState extends MovieState {}

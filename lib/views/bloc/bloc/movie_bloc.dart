@@ -22,13 +22,16 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       OnPopularMovieLoadEvent event, Emitter<MovieState> emit) async {
     try {
       emit(MovieLoadingState());
-      final response = await _movieRepoImplementation.getPopularMovies();
-      if (response is Success) {
-        log('bloc success res: ${response.value}');
-        emit(PopularMoviesState(popularMovies: response.value));
-      } else if (response is Failed) {
-        log('bloc failed res: ${response.value}');
-
+      final popularResponse = await _movieRepoImplementation.getPopularMovies();
+      final trendingResponse =
+          await _movieRepoImplementation.getTrendingMovies();
+      if (popularResponse is Success && trendingResponse is Success) {
+        log('bloc success');
+        emit(PopularMoviesState(
+            popularMovies: popularResponse.value,
+            trendingMovies: trendingResponse.value));
+      } else if (popularResponse is Success && trendingResponse is Success) {
+        log('bloc failed res');
         emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
       }
     } catch (e) {

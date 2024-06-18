@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/data/movie_repo_impl.dart';
 import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
-import 'package:movieapp/views/ui/landing_screen.dart';
+import 'package:movieapp/views/ui/bottom_navigation.dart';
+import 'package:movieapp/views/ui/home_page.dart';
 import 'package:movieapp/views/ui/splash_screen.dart';
 
 void main() {
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {
             '/': (context) => const SplashScreen(),
-            '/landing': (context) => const LandingScreen()
+            '/home': (context) => const HomePage(),
+            '/bottomnav': (context)=>const BottomNav()
           }),
     );
   }

@@ -25,3 +25,9 @@ final class MovieFaileToLoadState extends MovieState {
   final String errorMessage;
   MovieFaileToLoadState({required this.errorMessage});
 }
+
+
+final class OnLoadMovieCastState extends MovieState{
+  final CastModel castModel;
+  OnLoadMovieCastState({required this.castModel});
+}

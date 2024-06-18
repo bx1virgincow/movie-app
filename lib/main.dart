@@ -8,6 +8,7 @@ import 'package:movieapp/views/ui/home_page.dart';
 import 'package:movieapp/views/ui/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

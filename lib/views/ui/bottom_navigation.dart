@@ -12,43 +12,46 @@ class BottomNav extends StatefulWidget {
   State<BottomNav> createState() => _BottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> with AutomaticKeepAliveClientMixin{
+class _BottomNavState extends State<BottomNav>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocBuilder<BottomNavBloc, BottomNavState>(
       builder: (context, state) {
-        return Scaffold(
-          body: _currentPages[state.tabIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: state.tabIndex,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Colors.grey,
-            onTap: (value) => context.read<BottomNavBloc>().add(
-                  OnTabChangedEvent(
-                    tabIndex: value,
+        return SafeArea(
+          child: Scaffold(
+            body: _currentPages[state.tabIndex],
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: state.tabIndex,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              unselectedItemColor: Colors.grey,
+              onTap: (value) => context.read<BottomNavBloc>().add(
+                    OnTabChangedEvent(
+                      tabIndex: value,
+                    ),
                   ),
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Home',
                 ),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                label: 'Favorite',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite),
+                  label: 'Favorite',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: 'Settings',
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
-  
+
   @override
   bool get wantKeepAlive => true;
 }

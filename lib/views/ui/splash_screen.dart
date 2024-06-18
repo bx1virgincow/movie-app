@@ -36,11 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width * .5,
-                height: 50,
+                height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: const DecorationImage(
-                    image: AssetImage('assets/images/myimage.png'),
+                    image: AssetImage('assets/images/Rectangle.png'),
                   ),
                 ),
               ),
@@ -48,15 +48,14 @@ class _SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 10),
               //text
               Container(
+                width: 200,
+                height: 20,
                 decoration: const BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  MovieAppColor.gradientOne,
-                  MovieAppColor.gradientTwo
-                ])),
-                child: const Text(
-                  'Moviemot',
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/Moviemot.png')
+                  )
                 ),
-              )
+              ),
             ],
           ),
         ),

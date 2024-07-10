@@ -3,10 +3,10 @@ import 'dart:developer';
 
 import 'package:movieapp/common/constants.dart';
 import 'package:movieapp/common/results.dart';
-import 'package:movieapp/domain/movie_repo.dart';
+import 'package:movieapp/domain/repository/movie_repo.dart';
 import 'package:http/http.dart' as http;
-import 'package:movieapp/models/cast_model.dart';
-import 'package:movieapp/models/movie_model.dart';
+import 'package:movieapp/domain/models/cast_model.dart';
+import 'package:movieapp/domain/models/movie_model.dart';
 
 class MovieRepoImplementation implements MovieRepository {
   //popular movies

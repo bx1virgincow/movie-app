@@ -6,8 +6,8 @@ import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/common/results.dart';
 import 'package:movieapp/data/movie_repo_impl.dart';
-import 'package:movieapp/models/cast_model.dart';
-import 'package:movieapp/models/movie_model.dart';
+import 'package:movieapp/domain/models/cast_model.dart';
+import 'package:movieapp/domain/models/movie_model.dart';
 
 part 'movie_event.dart';
 part 'movie_state.dart';

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:movieapp/common/color.dart';
 import 'package:movieapp/common/date_formatter.dart';
-import 'package:movieapp/models/movie_model.dart';
-import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
+import 'package:movieapp/domain/models/movie_model.dart';
 
 class PopularMovieScreen extends StatelessWidget {
-  final MovieBloc movieBloc;
   final Movie movie;
   final IconData iconData;
   final VoidCallback onTap;
   const PopularMovieScreen({
     super.key,
-    required this.movieBloc,
     required this.movie,
     required this.iconData,
     required this.onTap,

@@ -28,10 +28,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Movie App',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+          // theme: ThemeData(
+          //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          //   useMaterial3: true,
+          // ),
           initialRoute: '/',
           routes: {
             '/': (context) => const SplashScreen(),

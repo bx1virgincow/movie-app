@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:movieapp/common/cast_sample_data.dart';
 import 'package:movieapp/common/color.dart';
 import 'package:movieapp/common/date_formatter.dart';
-import 'package:movieapp/models/movie_model.dart';
-import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
+import 'package:movieapp/domain/models/movie_model.dart';
 import 'package:movieapp/views/widgets/cast_widget.dart';
 
 class DetailsPage extends StatefulWidget {
   final Movie movie;
-  final MovieBloc movieBloc;
   const DetailsPage({
     super.key,
     required this.movie,
-    required this.movieBloc,
   });
 
   @override
@@ -22,11 +18,11 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   //calling cast query on initState
-  @override
-  void initState() {
-    super.initState();
-    widget.movieBloc.add(OnLoadMovieCastEvent(movieId: widget.movie.id));
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.movieBloc.add(OnLoadMovieCastEvent(movieId: widget.movie.id));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +51,18 @@ class _DetailsPageState extends State<DetailsPage> {
                       Positioned(
                         left: 20,
                         top: 20,
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: MovieAppColor.avatarBgColor,
-                              borderRadius: BorderRadius.circular(10),
-                              image: const DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/eva_arrow-ios-back-outline.png'))),
+                        child: InkWell(
+                          onTap: ()=>Navigator.pop(context),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: MovieAppColor.avatarBgColor,
+                                borderRadius: BorderRadius.circular(10),
+                                image: const DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/eva_arrow-ios-back-outline.png'))),
+                          ),
                         ),
                       ),
 

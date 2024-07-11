@@ -43,3 +43,9 @@ final class MovieErrorState extends MovieState{
 
   MovieErrorState({required this.errorMessage});
 }
+
+final class SearchMovieState extends MovieState{
+  final MovieResponse movieResponse;
+
+  SearchMovieState({required this.movieResponse});
+}

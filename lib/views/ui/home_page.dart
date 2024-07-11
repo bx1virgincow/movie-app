@@ -4,11 +4,17 @@ import 'package:movieapp/common/color.dart';
 import 'package:movieapp/data/movie_repo_impl.dart';
 import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
 import 'package:movieapp/views/ui/details_page.dart';
+import 'package:movieapp/views/ui/search_page.dart';
 import 'package:movieapp/views/widgets/popular_movies_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -65,26 +71,36 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               // Search field
-              TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.search_outlined,
-                    color: MovieAppColor.searchIconColor,
-                    size: 30,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SearchPage()),
+                  );
+                },
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.search_outlined,
+                        color: MovieAppColor.searchIconColor,
+                        size: 30,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      hintText: 'Search for movies, tv show...',
+                      hintStyle: const TextStyle(
+                        color: MovieAppColor.searchIconColor,
+                      ),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50)),
+                      fillColor: MovieAppColor.searchFieldColor,
+                      filled: true,
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  hintText: 'Search for movies, tv show...',
-                  hintStyle: const TextStyle(
-                    color: MovieAppColor.searchIconColor,
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(50)),
-                  fillColor: MovieAppColor.searchFieldColor,
-                  filled: true,
                 ),
               ),
 
@@ -95,8 +111,8 @@ class HomePage extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   } else if (state is PopularMoviesState) {
-                    var popular = state;
-                    var trending = state;
+                    var popular = state.popularMovies;
+                    var trending = state.trendingMovies;
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +129,7 @@ class HomePage extends StatelessWidget {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                              children: popular.popularMovies.results
+                              children: popular.results
                                   .map((movie) => PopularMovieScreen(
                                         onTap: () {
                                           Navigator.push(
@@ -138,7 +154,7 @@ class HomePage extends StatelessWidget {
 
                         _movieHeaders(
                           movieTitle: 'Free To Watch',
-                          movieType: 'Moives',
+                          movieType: 'Movies',
                         ),
 
                         // Space
@@ -148,9 +164,18 @@ class HomePage extends StatelessWidget {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                              children: trending.trendingMovies.results
+                              children: trending.results
                                   .map((movie) => PopularMovieScreen(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailsPage(
+                                              movie: movie,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       movie: movie,
                                       iconData: Icons.favorite_outline))
                                   .toList()),
@@ -158,9 +183,9 @@ class HomePage extends StatelessWidget {
                       ],
                     );
                   } else if (state is MovieFaileToLoadState) {
-                    final errorState = state;
+                    final errorState = state.errorMessage;
                     return Center(
-                      child: Text(errorState.errorMessage),
+                      child: Text(errorState),
                     );
                   } else {
                     return const SizedBox();

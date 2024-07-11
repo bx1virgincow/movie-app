@@ -10,7 +10,7 @@ class CastWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 170,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: castMember.cast.length,
@@ -20,10 +20,9 @@ class CastWidget extends StatelessWidget {
             child: Card(
               elevation: 4,
               surfaceTintColor: MovieAppColor.avatarBgColor,
-              child: SizedBox(
-                width: 120,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 120,
@@ -32,30 +31,14 @@ class CastWidget extends StatelessWidget {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
-                            'https://image.tmdb.org/t/p/w200${castMember.cast[index].profilePath}',
-                          ),
+                              'https://image.tmdb.org/t/p/w200${castMember.cast[index].profilePath}'),
                         ),
                       ),
                     ),
+                    //space
                     const SizedBox(height: 10),
-                    Text(
-                      castMember.cast[index].name,
-                      style: const TextStyle(
-                        color: MovieAppColor.popularTxtColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      castMember.cast[index].character,
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        fontSize: 12,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    //cast name
+                    Text(castMember.cast[index].name)
                   ],
                 ),
               ),

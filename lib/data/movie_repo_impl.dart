@@ -125,16 +125,29 @@ class MovieRepoImplementation implements MovieRepository {
   @override
   Future<Result> searchMovie(String query) async {
     try {
-      final response = await http.get(Uri.parse(
-          '${Constants.baseUrl}/search/movie?api_key=${Constants.bearerToken}&query=$query'));
+      log('query: $query');
+      final response = await http.get(
+          Uri.parse(
+            'https://api.themoviedb.org/3/search/movie?query=$query&api_key=bb07a2715b2b530ca867d6379351933c',
+          ),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${Constants.bearerToken}'
+          });
 
       if (response.statusCode == 200) {
         final searchData = jsonDecode(response.body);
+        final movieResponse = MovieResponse.fromJson(searchData);
+        return Success(value: movieResponse);
+      } else {
+        log('Failed to search movies: ${response.statusCode}');
+        return Failed(
+            errorMessage: 'Failed to search movies',
+            value: response.statusCode);
       }
-
-      return Success(value: 'value');
     } catch (e) {
-      return Failed(errorMessage: 'errorMessage', value: e);
+      log('Exception occurred: $e');
+      return Failed(errorMessage: 'Exception occurred', value: e);
     }
   }
 }

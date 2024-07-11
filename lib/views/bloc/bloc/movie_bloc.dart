@@ -17,6 +17,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   MovieBloc(this._movieRepoImplementation) : super(MovieLoadingState()) {
     on<OnPopularMovieLoadEvent>(onPopularMovieLoadEvent);
     on<OnLoadMovieCastEvent>(_onLoadMovieCastEvent);
+    on<SearchMovieEvent>(_searchMovieEvent);
   }
 
   //popular movie load event
@@ -58,6 +59,27 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } catch (e) {
       log('movie cast exception');
       emit(MovieErrorState(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _searchMovieEvent(
+      SearchMovieEvent event, Emitter<MovieState> emit) async {
+    emit(MovieLoadingState());
+    try {
+      final searchResult =
+          await _movieRepoImplementation.searchMovie(event.query);
+      if (searchResult is Success) {
+        log('searchResult success: ${searchResult.value}');
+        final movies = searchResult.value;
+        log('movies: $movies');
+        emit(SearchMovieState(movieResponse: movies));
+      } else {
+        log('else: ${searchResult.value}');
+        emit(MovieFaileToLoadState(errorMessage: searchResult.value));
+      }
+    } catch (e) {
+      log('bloc exception: ${e.toString()}');
+      emit(MovieFaileToLoadState(errorMessage: e.toString()));
     }
   }
 }

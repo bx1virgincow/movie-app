@@ -17,17 +17,16 @@ class MovieResponse {
     );
   }
 }
-
 class Movie {
   bool adult;
-  String backdropPath;
+  String? backdropPath; // Nullable
   List<int> genreIds;
   int id;
   String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
-  String posterPath;
+  String? posterPath; // Nullable
   String releaseDate;
   String title;
   bool video;
@@ -36,14 +35,14 @@ class Movie {
 
   Movie({
     required this.adult,
-    required this.backdropPath,
+    this.backdropPath,
     required this.genreIds,
     required this.id,
     required this.originalLanguage,
     required this.originalTitle,
     required this.overview,
     required this.popularity,
-    required this.posterPath,
+    this.posterPath,
     required this.releaseDate,
     required this.title,
     required this.video,
@@ -60,12 +59,12 @@ class Movie {
       originalLanguage: json['original_language'],
       originalTitle: json['original_title'],
       overview: json['overview'],
-      popularity: json['popularity'].toDouble(),
+      popularity: (json['popularity'] as num).toDouble(),
       posterPath: json['poster_path'],
       releaseDate: json['release_date'],
       title: json['title'],
       video: json['video'],
-      voteAverage: json['vote_average'].toDouble(),
+      voteAverage: (json['vote_average'] as num).toDouble(),
       voteCount: json['vote_count'],
     );
   }

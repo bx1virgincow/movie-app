@@ -46,19 +46,18 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   FutureOr<void> _onLoadMovieCastEvent(
       OnLoadMovieCastEvent event, Emitter<MovieState> emit) async {
     try {
-      final response = await _movieRepoImplementation.getCasts(event.movieId);
-
-      if (response is Success) {
-        emit(OnLoadMovieCastState(castModel: response.value));
-      } else if (response is Failed) {
-        log('bloc failed res');
-        emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
-      } else {
-        log('bloc failed res');
-        emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
+      emit(MovieLoadingState());
+      final movieCast = await _movieRepoImplementation.getCasts(event.movieId);
+      if (movieCast is Success) {
+        log('movie cast success');
+        emit(MovieCastLoadedState(movieCast: movieCast.value));
+      } else if (movieCast is Failed) {
+        log('movie cast failed');
+        emit(MovieErrorState(errorMessage: movieCast.errorMessage));
       }
     } catch (e) {
-      emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
+      log('movie cast exception');
+      emit(MovieErrorState(errorMessage: e.toString()));
     }
   }
 }

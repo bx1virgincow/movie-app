@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movieapp/common/cast_sample_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/common/color.dart';
 import 'package:movieapp/common/date_formatter.dart';
+import 'package:movieapp/data/movie_repo_impl.dart';
 import 'package:movieapp/domain/models/movie_model.dart';
+import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
 import 'package:movieapp/views/widgets/cast_widget.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -17,12 +19,13 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  //calling cast query on initState
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.movieBloc.add(OnLoadMovieCastEvent(movieId: widget.movie.id));
-  // }
+  final MovieBloc _movieBloc = MovieBloc(MovieRepoImplementation());
+
+  @override
+  void initState() {
+    super.initState();
+    _movieBloc.add(OnLoadMovieCastEvent(movieId: widget.movie.id));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +50,12 @@ class _DetailsPageState extends State<DetailsPage> {
                         image: NetworkImage(
                             'https://image.tmdb.org/t/p/original/${widget.movie.backdropPath}'),
                       ),
-                      //back button
+                      // Back button
                       Positioned(
                         left: 20,
                         top: 20,
                         child: InkWell(
-                          onTap: ()=>Navigator.pop(context),
+                          onTap: () => Navigator.pop(context),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -66,7 +69,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
 
-                      //favorite button
+                      // Favorite button
                       const Positioned(
                         top: 30,
                         right: 20,
@@ -77,7 +80,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
 
-                      //date
+                      // Movie title
                       Positioned(
                           bottom: 70,
                           left: 20,
@@ -95,7 +98,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                           )),
 
-                      //title
+                      // Vote count
                       Positioned(
                         bottom: 80,
                         right: 20,
@@ -107,7 +110,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
 
-                      //movie time
+                      // Release date
                       Positioned(
                         bottom: 50,
                         left: 20,
@@ -119,7 +122,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
 
-                      // button
+                      // Action button
                       Positioned(
                         bottom: 10,
                         left: 20,
@@ -142,40 +145,55 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-                //out of stack
-                //continuing with other desings
+                // Movie description
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //movie description
                       Text(
                         widget.movie.overview,
                         style: const TextStyle(
                           color: MovieAppColor.movieOverviewColor,
                         ),
                       ),
-                      //movie cast title
+                      const SizedBox(height: 10),
+
+                      // Cast title
                       const Text(
                         'Cast',
                         style: TextStyle(fontSize: 25),
                       ),
+                      const SizedBox(height: 10),
 
-                      //row of cast
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                            children: castSampleData
-                                .map((e) => CastWidget(castSampleData: e))
-                                .toList()),
+                      // Cast list
+                      BlocBuilder<MovieBloc, MovieState>(
+                        bloc: _movieBloc,
+                        builder: (context, state) {
+                          if (state is MovieLoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is MovieCastLoadedState) {
+                            final cast = state.movieCast;
+                            return CastWidget(castMember: cast);
+                          } else if (state is MovieErrorState) {
+                            final errorState = state.errorMessage;
+                            return Center(
+                              child: Text(errorState),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
                       ),
+                      const SizedBox(height: 10),
 
-                      //button
+                      // Play trailer button
                       Container(
                         width: double.infinity,
                         height: 50,
@@ -194,8 +212,10 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
 
-                     const Center(
+                      // Download text
+                      const Center(
                         child: Text(
                           'Download',
                           style: TextStyle(
@@ -210,7 +230,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

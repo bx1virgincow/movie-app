@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:movieapp/common/constants.dart';
 import 'package:movieapp/common/results.dart';
+import 'package:movieapp/domain/models/cast_model.dart';
 import 'package:movieapp/domain/repository/movie_repo.dart';
 import 'package:http/http.dart' as http;
-import 'package:movieapp/domain/models/cast_model.dart';
 import 'package:movieapp/domain/models/movie_model.dart';
 
 class MovieRepoImplementation implements MovieRepository {
@@ -89,11 +89,11 @@ class MovieRepoImplementation implements MovieRepository {
 
   //fetch cast
   @override
-  Future<Result> getCasts(int id) async {
+  Future<Result> getCasts(int movieId) async {
     try {
       final response = await http.get(
           Uri.parse(
-            '${Constants.movieCastEndPoint}/$id/images',
+            '${Constants.movieCastEndPoint}$movieId/credits?api_key=${Constants.bearerToken}',
           ),
           headers: {
             'Content-Type': 'application/json',
@@ -102,22 +102,39 @@ class MovieRepoImplementation implements MovieRepository {
           });
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        log('cast jsonRes: $jsonResponse');
-
         if (jsonResponse is Map<String, dynamic>) {
-          final res = CastModel.fromJson(jsonResponse);
+          log('at this point : $jsonResponse');
+          final res = MovieCastResponse.fromJson(jsonResponse);
           return Success(value: res);
         } else if (jsonResponse is List) {
-          final res = jsonResponse.map((e) => CastModel.fromJson(e)).toList();
+          log('at that point');
+          final res =
+              jsonResponse.map((e) => MovieCastResponse.fromJson(e)).toList();
           return Success(value: res);
-        }else{
+        } else {
           log('errr: $jsonResponse');
           return Failed(errorMessage: 'errorMessage', value: jsonResponse);
         }
       }
-      return Success(value: 'value');
+      return Success(value: 'success');
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Result> searchMovie(String query) async {
+    try {
+      final response = await http.get(Uri.parse(
+          '${Constants.baseUrl}/search/movie?api_key=${Constants.bearerToken}&query=$query'));
+
+      if (response.statusCode == 200) {
+        final searchData = jsonDecode(response.body);
+      }
+
+      return Success(value: 'value');
+    } catch (e) {
+      return Failed(errorMessage: 'errorMessage', value: e);
     }
   }
 }

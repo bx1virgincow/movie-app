@@ -10,6 +10,5 @@ class Constants {
   static const String trendingMoviesEndpoint =
       '$baseUrl/trending/movie/day?language=en-US';
 
-  static const String movieCastEndPoint =
-      '$baseUrl/movie/';
+  static const String movieCastEndPoint = '$baseUrl/movie/';
 }

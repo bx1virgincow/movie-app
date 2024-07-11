@@ -28,6 +28,18 @@ final class MovieFaileToLoadState extends MovieState {
 
 
 final class OnLoadMovieCastState extends MovieState{
-  final CastModel castModel;
-  OnLoadMovieCastState({required this.castModel});
+  final MovieCastResponse movieCastResponse;
+  OnLoadMovieCastState({required this.movieCastResponse});
+}
+
+final class MovieCastLoadedState extends MovieState{
+  final MovieCastResponse movieCast;
+
+  MovieCastLoadedState({required this.movieCast});
+}
+
+final class MovieErrorState extends MovieState{
+  final String errorMessage;
+
+  MovieErrorState({required this.errorMessage});
 }

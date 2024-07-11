@@ -172,4 +172,27 @@ class MovieRepoImplementation implements MovieRepository {
       return Failed(errorMessage: 'Failed to fetch movie details', value: e);
     }
   }
+
+  @override
+  Future<Result> getMovieTrailer(int movieId) async {
+    final url =
+        'https://api.themoviedb.org/3/movie/$movieId/videos?api_key=bb07a2715b2b530ca867d6379351933c';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final videos = data['results'];
+
+      for (var video in videos) {
+        if (video['type'] == 'Trailer' && video['site'] == 'YouTube') {
+          final videoKey = video['key'];
+          return Success(value: videoKey);
+        }
+      }
+      throw Exception('Trailer not found');
+    } else {
+      throw Exception('Failed to load videos');
+    }
+  }
 }

@@ -12,4 +12,6 @@ abstract class MovieRepository{
   Future<Result> searchMovie(String query);
 
   Future<Result> getMovieDetail(int movieId);
+
+  Future<Result> getMovieTrailer(int movieId);
 }

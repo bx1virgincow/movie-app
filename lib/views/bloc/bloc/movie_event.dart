@@ -15,3 +15,9 @@ class SearchMovieEvent extends MovieEvent{
 
   SearchMovieEvent({required this.query});
 }
+
+class GetMovieDetails extends MovieEvent{
+  final int movieId;
+
+  GetMovieDetails({required this.movieId});
+}

@@ -10,4 +10,6 @@ abstract class MovieRepository{
   Future<Result> getCasts(int movieId);
 
   Future<Result> searchMovie(String query);
+
+  Future<Result> getMovieDetail(int movieId);
 }

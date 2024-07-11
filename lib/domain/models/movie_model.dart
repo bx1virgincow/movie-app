@@ -19,14 +19,14 @@ class MovieResponse {
 }
 class Movie {
   bool adult;
-  String? backdropPath; // Nullable
+  String? backdropPath;
   List<int> genreIds;
   int id;
   String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
-  String? posterPath; // Nullable
+  String? posterPath;
   String releaseDate;
   String title;
   bool video;

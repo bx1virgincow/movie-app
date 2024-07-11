@@ -49,3 +49,10 @@ final class SearchMovieState extends MovieState{
 
   SearchMovieState({required this.movieResponse});
 }
+
+final class MovieDetailState extends MovieState{
+  final MovieDetail movieDetail;
+
+  MovieDetailState({required this.movieDetail});
+}
+

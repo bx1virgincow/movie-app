@@ -17,12 +17,13 @@ class SearchTile extends StatelessWidget {
       onTap: onTap,
       title: Text(movie.title),
       subtitle: Text(movie.releaseDate),
-      leading: Image.network(
-        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-        fit: BoxFit.cover,
+      leading: SizedBox(
         width: 50,
-        height: 50,
-      ),
+        child: Image.network(
+          'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+          fit: BoxFit.cover,
+        ),
+      ), // Adjust the width as needed
     );
   }
 }

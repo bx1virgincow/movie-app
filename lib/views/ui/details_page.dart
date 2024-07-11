@@ -5,6 +5,7 @@ import 'package:movieapp/common/date_formatter.dart';
 import 'package:movieapp/data/movie_repo_impl.dart';
 import 'package:movieapp/domain/models/movie_model.dart';
 import 'package:movieapp/views/bloc/bloc/movie_bloc.dart';
+import 'package:movieapp/views/ui/video_player_screen.dart';
 import 'package:movieapp/views/widgets/cast_widget.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -194,20 +195,32 @@ class _DetailsPageState extends State<DetailsPage> {
                       const SizedBox(height: 10),
 
                       // Play trailer button
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: MovieAppColor.actionBtnColor,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Play Trailer',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 25,
-                              color: MovieAppColor.avatarBgColor,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const VideoPlayerScreen(
+                                videoUrl: 'https://www.example.com/trailer.mp4',
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: MovieAppColor.actionBtnColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Play Trailer',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 25,
+                                color: MovieAppColor.avatarBgColor,
+                              ),
                             ),
                           ),
                         ),

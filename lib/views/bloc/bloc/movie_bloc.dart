@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/common/results.dart';
 import 'package:movieapp/data/movie_repo_impl.dart';
 import 'package:movieapp/domain/models/cast_model.dart';
+import 'package:movieapp/domain/models/movie_details.dart';
 import 'package:movieapp/domain/models/movie_model.dart';
 
 part 'movie_event.dart';
@@ -18,6 +18,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     on<OnPopularMovieLoadEvent>(onPopularMovieLoadEvent);
     on<OnLoadMovieCastEvent>(_onLoadMovieCastEvent);
     on<SearchMovieEvent>(_searchMovieEvent);
+    on<GetMovieDetails>(_getMovieDetails);
   }
 
   //popular movie load event
@@ -29,17 +30,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       final trendingResponse =
           await _movieRepoImplementation.getTrendingMovies();
       if (popularResponse is Success && trendingResponse is Success) {
-        log('bloc success');
         emit(PopularMoviesState(
             popularMovies: popularResponse.value,
             trendingMovies: trendingResponse.value));
       } else if (popularResponse is Success && trendingResponse is Success) {
-        log('bloc failed res');
         emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
       }
     } catch (e) {
-      log('bloc exception: $e');
-
       emit(MovieFaileToLoadState(errorMessage: 'errorMessage'));
     }
   }
@@ -50,14 +47,11 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       emit(MovieLoadingState());
       final movieCast = await _movieRepoImplementation.getCasts(event.movieId);
       if (movieCast is Success) {
-        log('movie cast success');
         emit(MovieCastLoadedState(movieCast: movieCast.value));
       } else if (movieCast is Failed) {
-        log('movie cast failed');
         emit(MovieErrorState(errorMessage: movieCast.errorMessage));
       }
     } catch (e) {
-      log('movie cast exception');
       emit(MovieErrorState(errorMessage: e.toString()));
     }
   }
@@ -69,17 +63,32 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       final searchResult =
           await _movieRepoImplementation.searchMovie(event.query);
       if (searchResult is Success) {
-        log('searchResult success: ${searchResult.value}');
         final movies = searchResult.value;
-        log('movies: $movies');
         emit(SearchMovieState(movieResponse: movies));
       } else {
-        log('else: ${searchResult.value}');
         emit(MovieFaileToLoadState(errorMessage: searchResult.value));
       }
     } catch (e) {
-      log('bloc exception: ${e.toString()}');
       emit(MovieFaileToLoadState(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _getMovieDetails(
+      GetMovieDetails event, Emitter<MovieState> emit) async {
+    try {
+      emit(MovieLoadingState());
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      final detailResponse =
+          await _movieRepoImplementation.getMovieDetail(event.movieId);
+
+      if (detailResponse is Success) {
+        emit(MovieDetailState(movieDetail: detailResponse.value));
+      } else if (detailResponse is Failed) {
+        emit(MovieFaileToLoadState(errorMessage: detailResponse.errorMessage));
+      }
+    } catch (e) {
+      emit(MovieErrorState(errorMessage: e.toString()));
     }
   }
 }
